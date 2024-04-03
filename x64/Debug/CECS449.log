@@ -1,0 +1,12 @@
+﻿  Source.cpp
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,39): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,39): warning C4244:         with
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,39): warning C4244:         [
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,39): warning C4244:             T=float
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,39): warning C4244:         ]
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,36): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,36): warning C4244:         with
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,36): warning C4244:         [
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,36): warning C4244:             T=float
+C:\Users\devin\source\repos\CECS449\Source.cpp(56,36): warning C4244:         ]
+  CECS449.vcxproj -> C:\Users\devin\source\repos\CECS449\x64\Debug\CECS449.exe
