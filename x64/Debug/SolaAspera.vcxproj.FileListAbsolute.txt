@@ -1,2 +1,8 @@
 C:\Users\devin\OneDrive\Desktop\sl;fa\x64\Debug\SolaAspera.exe
 C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\SolaAspera.exe
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\SolaAspera.vcxproj.CopyComplete
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\assimp-vc143-mtd.dll
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\poly2tri.dll
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\minizip.dll
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\zlibd1.dll
+C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\pugixml.dll
