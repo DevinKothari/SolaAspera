@@ -102,12 +102,12 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
-	auto boat = assimpLoad("models/earth.glb", true);
+	auto boat = assimpLoad("models/Earth.obj", true);
 	boat.move(glm::vec3(0, -0.7, 0));
-	//boat.grow(glm::vec3(0.01, 0.01, 0.01));
-	auto tiger = assimpLoad("models/tiger/scene.gltf", true);
+	boat.grow(glm::vec3(0.3, 0.3, 0.3));
+	auto tiger = assimpLoad("models/Moon.obj", true);
 	tiger.move(glm::vec3(0, -5, 10));
-	//boat.addChild(std::move(tiger));
+	boat.addChild(std::move(tiger));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
 	// function terminates. To prevent that, we need to move them into a vector, and then
@@ -125,15 +125,15 @@ Scene lifeOfPi() {
 
 	// The Animators will be destroyed when leaving this function, so we move them into
 	// a list to be returned.
-	//std::vector<Animator> animators;
-	//animators.push_back(std::move(animBoat));
-	//animators.push_back(std::move(animTiger));
+	std::vector<Animator> animators;
+	animators.push_back(std::move(animBoat));
+	animators.push_back(std::move(animTiger));
 
 	// Transfer ownership of the objects and animators back to the main.
 	return Scene {
 		textureMapping(),
 		std::move(objects),
-		//std::move(animators)
+		std::move(animators)
 	};
 }
 
@@ -143,7 +143,7 @@ int main() {
 	Settings.depthBits = 24; // Request a 24 bits depth buffer
 	Settings.stencilBits = 8;  // Request a 8 bits stencil buffer
 	Settings.antialiasingLevel = 2;  // Request 2 levels of antialiasing
-	sf::RenderWindow window(sf::VideoMode{ 1200, 800 }, "SFML Demo", sf::Style::Resize | sf::Style::Close, Settings);
+	sf::RenderWindow window(sf::VideoMode{ 1200, 800 }, "Our Solar System", sf::Style::Resize | sf::Style::Close, Settings);
 	gladLoadGL();
 	glEnable(GL_DEPTH_TEST);
 
