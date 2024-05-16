@@ -102,12 +102,12 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
-	auto boat = assimpLoad("models/earth.glb", true);
+	auto boat = assimpLoad("models/GlowStick.obj", true);
 	boat.move(glm::vec3(0, -0.7, 0));
 	//boat.grow(glm::vec3(0.01, 0.01, 0.01));
 	auto tiger = assimpLoad("models/tiger/scene.gltf", true);
 	tiger.move(glm::vec3(0, -5, 10));
-	//boat.addChild(std::move(tiger));
+	boat.addChild(std::move(tiger));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
 	// function terminates. To prevent that, we need to move them into a vector, and then
@@ -125,15 +125,15 @@ Scene lifeOfPi() {
 
 	// The Animators will be destroyed when leaving this function, so we move them into
 	// a list to be returned.
-	//std::vector<Animator> animators;
-	//animators.push_back(std::move(animBoat));
-	//animators.push_back(std::move(animTiger));
+	std::vector<Animator> animators;
+	animators.push_back(std::move(animBoat));
+	animators.push_back(std::move(animTiger));
 
 	// Transfer ownership of the objects and animators back to the main.
 	return Scene {
 		textureMapping(),
 		std::move(objects),
-		//std::move(animators)
+		std::move(animators)
 	};
 }
 

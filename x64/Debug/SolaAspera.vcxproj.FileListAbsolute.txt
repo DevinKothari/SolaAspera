@@ -6,3 +6,4 @@ C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\poly2tri.dll
 C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\minizip.dll
 C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\zlibd1.dll
 C:\Users\devin\OneDrive\Desktop\SolaAspera\x64\Debug\pugixml.dll
+C:\Users\myleg\Desktop\SolaAspera\x64\Debug\SolaAspera.exe
