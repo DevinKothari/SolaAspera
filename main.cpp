@@ -105,23 +105,27 @@ Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
 	auto sun = assimpLoad("models/Venus_1K.obj", true);
 	sun.move(glm::vec3(0, 0, 0));
-	//sun.grow(glm::vec3(0.7, 0.7, 0.7));
+	sun.grow(glm::vec3(1.3, 1.3, 1.3));
+	
 	auto mercury = assimpLoad("models/Mercury_1K.obj", true);
-	mercury.move(glm::vec3(0, 0, 10));
-	mercury.grow(glm::vec3(0.3, 0.3, 0.3));
+	mercury.move(glm::vec3(5, 0, 10));
+	//mercury.grow(glm::vec3(0.3, 0.3, 0.3));
 	sun.addChild(std::move(mercury));
+	
 	auto venus = assimpLoad("models/Venus_1K.obj", true);
-	venus.move(glm::vec3(0, 0, 20));
-	venus.grow(glm::vec3(0.3, 0.3, 0.3));
+	venus.move(glm::vec3(0, 10, 20));
+	//venus.grow(glm::vec3(0.3, 0.3, 0.3));
 	sun.addChild(std::move(venus));
+	
 	auto earth = assimpLoad("models/Earth.obj", true);
-	earth.move(glm::vec3(0, 0, 50));
-	earth.grow(glm::vec3(0.3, 0.3, 0.3));
+	earth.move(glm::vec3(15, 0, 30));
+	earth.grow(glm::vec3(0.35, 0.35, 0.35));
 	sun.addChild(std::move(earth));
+	
 	auto moon = assimpLoad("models/Moon.obj", true);
-	moon.move(glm::vec3(0, 0, 10));
+	moon.move(glm::vec3(15, 0, 35));
 	moon.grow(glm::vec3(0.3, 0.3, 0.3));
-	earth.addChild(std::move(moon));
+	sun.addChild(std::move(moon));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
 	// function terminates. To prevent that, we need to move them into a vector, and then
@@ -132,18 +136,46 @@ Scene lifeOfPi() {
 	// We want these animations to referenced the *moved* objects, which are no longer
 	// in the variables named "tiger" and "boat". "boat" is now in the "objects" list at
 	// index 0, and "tiger" is the index-1 child of the boat.
-	Animator animEarth;
-	animEarth.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
+	Animator animSun;
+	animSun.addAnimation(std::make_unique<RotationAnimation>(objects[0], 60, glm::vec3(0, 6.28, 0)));
+	
+	Animator animMercuryOrbit;
+	animMercuryOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	Animator animMercuryRotation;
+	animMercuryRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 45, glm::vec3(-2.28, 6.28, -2.28)));
+	
+	Animator animVenusOrbit;
+	animVenusOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(2), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	Animator animVenusRotation;
+	animVenusRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(2), 45, glm::vec3(-2.28, 6.28, -2.28)));
+	
+	Animator animEarthOrbit;
+	animEarthOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(3), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	Animator animEarthRotation;
+	animEarthRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(3), 45, glm::vec3(-2.28, 6.28, -2.28)));
+
 	Animator animMoonOrbit;
-	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 20, objects[0].getPosition(), glm::vec3(0, 1, 0))); // Complete one orbit in 1 minute
-	//animMoonOrbit.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 10, glm::vec3(0, 0, 6.28)));
+	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(4), 10, objects[0].getPosition(), glm::vec3(0, 1, 0)));
 	Animator animMoonRotation;
-	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 40, glm::vec3(0, 0, 6.28)));
+	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(4), 10, glm::vec3(-6.28, 6.28, -6.28)));
+
+	//Animator animEarth;
+	//animEarth.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
+	//Animator animMoonOrbit;
+	//animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 30, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	//Animator animMoonRotation;
+	//animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 50, glm::vec3(-6.28, 6.28, -6.28)));
 
 	// The Animators will be destroyed when leaving this function, so we move them into
 	// a list to be returned.
 	std::vector<Animator> animators;
-	animators.push_back(std::move(animEarth));
+	animators.push_back(std::move(animSun));
+	animators.push_back(std::move(animMercuryOrbit));
+	animators.push_back(std::move(animMercuryRotation));
+	animators.push_back(std::move(animVenusOrbit));
+	animators.push_back(std::move(animVenusRotation));
+	animators.push_back(std::move(animEarthOrbit));
+	animators.push_back(std::move(animEarthRotation));
 	animators.push_back(std::move(animMoonOrbit));
 	animators.push_back(std::move(animMoonRotation));
 
@@ -171,7 +203,7 @@ int main() {
 	auto& boat = scene.objects[0];
 	auto& tiger = boat.getChild(1);
 
-	auto cameraPosition = glm::vec3(0, 0, 5);
+	auto cameraPosition = glm::vec3(0, 100, 0);
 	auto camera = glm::lookAt(cameraPosition, glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
 	auto perspective = glm::perspective(glm::radians(45.0), static_cast<double>(window.getSize().x) / window.getSize().y, 0.1, 100.0);
 
