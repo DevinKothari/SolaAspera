@@ -102,7 +102,7 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
-	auto boat = assimpLoad("models/GlowStick.obj", true);
+	auto boat = assimpLoad("models/Venus_1k.obj", true);
 	boat.move(glm::vec3(0, -0.7, 0));
 	//boat.grow(glm::vec3(0.01, 0.01, 0.01));
 	auto tiger = assimpLoad("models/tiger/scene.gltf", true);
