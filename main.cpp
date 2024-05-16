@@ -103,9 +103,21 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
+	auto sun = assimpLoad("models/Sun.obj", true);
+	sun.move(glm::vec3(0, 0, 0));
+	//sun.grow(glm::vec3(0.7, 0.7, 0.7));
+	auto mercury = assimpLoad("models/Mercury_1K.obj", true);
+	mercury.move(glm::vec3(0, 0, 10));
+	mercury.grow(glm::vec3(0.3, 0.3, 0.3));
+	sun.addChild(std::move(mercury));
+	auto venus = assimpLoad("models/Venus_1K.obj", true);
+	venus.move(glm::vec3(0, 0, 20));
+	venus.grow(glm::vec3(0.3, 0.3, 0.3));
+	sun.addChild(std::move(venus));
 	auto earth = assimpLoad("models/Earth.obj", true);
 	earth.move(glm::vec3(0, 0, 0));
 	earth.grow(glm::vec3(0.3, 0.3, 0.3));
+	sun.addChild(std::move(earth));
 	auto moon = assimpLoad("models/Moon.obj", true);
 	moon.move(glm::vec3(0, 0, 10));
 	moon.grow(glm::vec3(0.3, 0.3, 0.3));
@@ -115,7 +127,7 @@ Scene lifeOfPi() {
 	// function terminates. To prevent that, we need to move them into a vector, and then
 	// move that vector as part of the return value.
 	std::vector<Object3D> objects;
-	objects.push_back(std::move(earth));
+	objects.push_back(std::move(sun));
 	
 	// We want these animations to referenced the *moved* objects, which are no longer
 	// in the variables named "tiger" and "boat". "boat" is now in the "objects" list at
@@ -124,8 +136,9 @@ Scene lifeOfPi() {
 	animEarth.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
 	Animator animMoonOrbit;
 	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 20, objects[0].getPosition(), glm::vec3(0, 1, 0))); // Complete one orbit in 1 minute
+	//animMoonOrbit.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 10, glm::vec3(0, 0, 6.28)));
 	Animator animMoonRotation;
-	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 10, glm::vec3(0, 0, 6.28)));
+	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 40, glm::vec3(0, 0, 6.28)));
 
 	// The Animators will be destroyed when leaving this function, so we move them into
 	// a list to be returned.
@@ -148,7 +161,7 @@ int main() {
 	Settings.depthBits = 24; // Request a 24 bits depth buffer
 	Settings.stencilBits = 8;  // Request a 8 bits stencil buffer
 	Settings.antialiasingLevel = 2;  // Request 2 levels of antialiasing
-	sf::RenderWindow window(sf::VideoMode{ 1200, 800 }, "Our Solar System", sf::Style::Resize | sf::Style::Close, Settings);
+	sf::RenderWindow window(sf::VideoMode{ 1920, 1080 }, "Our Solar System", sf::Style::Resize | sf::Style::Close, Settings);
 	gladLoadGL();
 	glEnable(GL_DEPTH_TEST);
 
