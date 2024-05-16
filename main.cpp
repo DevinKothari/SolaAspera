@@ -110,28 +110,31 @@ Scene lifeOfPi() {
 	auto mercury = assimpLoad("models/Mercury_1K.obj", true);
 	mercury.move(glm::vec3(5, 0, 10));
 	//mercury.grow(glm::vec3(0.3, 0.3, 0.3));
-	sun.addChild(std::move(mercury));
+	//sun.addChild(std::move(mercury));
 	
 	auto venus = assimpLoad("models/Venus_1K.obj", true);
 	venus.move(glm::vec3(0, 10, 20));
 	//venus.grow(glm::vec3(0.3, 0.3, 0.3));
-	sun.addChild(std::move(venus));
+	//sun.addChild(std::move(venus));
 	
 	auto earth = assimpLoad("models/Earth.obj", true);
-	earth.move(glm::vec3(15, 0, 30));
+	earth.move(glm::vec3(0, 0, 30));
 	earth.grow(glm::vec3(0.35, 0.35, 0.35));
-	sun.addChild(std::move(earth));
+	//sun.addChild(std::move(earth));
 	
 	auto moon = assimpLoad("models/Moon.obj", true);
-	moon.move(glm::vec3(15, 0, 35));
+	moon.move(glm::vec3(0, 0, 35));
 	moon.grow(glm::vec3(0.3, 0.3, 0.3));
-	sun.addChild(std::move(moon));
+	earth.addChild(std::move(moon));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
 	// function terminates. To prevent that, we need to move them into a vector, and then
 	// move that vector as part of the return value.
 	std::vector<Object3D> objects;
 	objects.push_back(std::move(sun));
+	objects.push_back(std::move(mercury));
+	objects.push_back(std::move(venus));
+	objects.push_back(std::move(earth));
 	
 	// We want these animations to referenced the *moved* objects, which are no longer
 	// in the variables named "tiger" and "boat". "boat" is now in the "objects" list at
@@ -140,24 +143,24 @@ Scene lifeOfPi() {
 	animSun.addAnimation(std::make_unique<RotationAnimation>(objects[0], 60, glm::vec3(0, 6.28, 0)));
 	
 	Animator animMercuryOrbit;
-	animMercuryOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	animMercuryOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[1], 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
 	Animator animMercuryRotation;
-	animMercuryRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 45, glm::vec3(-2.28, 6.28, -2.28)));
+	animMercuryRotation.addAnimation(std::make_unique<RotationAnimation>(objects[1], 45, glm::vec3(-2.28, 6.28, -2.28)));
 	
 	Animator animVenusOrbit;
-	animVenusOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(2), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	animVenusOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[2], 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
 	Animator animVenusRotation;
-	animVenusRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(2), 45, glm::vec3(-2.28, 6.28, -2.28)));
+	animVenusRotation.addAnimation(std::make_unique<RotationAnimation>(objects[2], 45, glm::vec3(-2.28, 6.28, -2.28)));
 	
 	Animator animEarthOrbit;
-	animEarthOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(3), 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	animEarthOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[3], 45, objects[0].getPosition(), glm::vec3(0, 1, 0)));
 	Animator animEarthRotation;
-	animEarthRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(3), 45, glm::vec3(-2.28, 6.28, -2.28)));
+	animEarthRotation.addAnimation(std::make_unique<RotationAnimation>(objects[3], 45, glm::vec3(-2.28, 6.28, -2.28)));
 
 	Animator animMoonOrbit;
-	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(4), 10, objects[0].getPosition(), glm::vec3(0, 1, 0)));
+	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[3].getChild(1), 45, objects[3].getPosition(), glm::vec3(0, 1, 0)));
 	Animator animMoonRotation;
-	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(4), 10, glm::vec3(-6.28, 6.28, -6.28)));
+	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[3].getChild(1), 45, glm::vec3(-1, 6.28, -1)));
 
 	//Animator animEarth;
 	//animEarth.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
