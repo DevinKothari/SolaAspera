@@ -105,26 +105,26 @@ Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
 	auto sun = assimpLoad("models/Venus_1K.obj", true);
 	sun.move(glm::vec3(0, 0, 0));
-	sun.grow(glm::vec3(1.3, 1.3, 1.3));
+	sun.grow(glm::vec3(2.0, 2.0, 2.0));
 	
 	auto mercury = assimpLoad("models/Mercury_1K.obj", true);
-	mercury.move(glm::vec3(5, 0, 10));
-	//mercury.grow(glm::vec3(0.3, 0.3, 0.3));
+	mercury.move(glm::vec3(5, 0, 5));
+	mercury.grow(glm::vec3(1.3, 1.3, 1.3));
 	//sun.addChild(std::move(mercury));
 	
 	auto venus = assimpLoad("models/Venus_1K.obj", true);
-	venus.move(glm::vec3(0, 10, 20));
-	//venus.grow(glm::vec3(0.3, 0.3, 0.3));
+	venus.move(glm::vec3(-5, 0, 15));
+	venus.grow(glm::vec3(1.3, 1.3, 1.3));
 	//sun.addChild(std::move(venus));
 	
 	auto earth = assimpLoad("models/Earth.obj", true);
 	earth.move(glm::vec3(0, 0, 30));
-	earth.grow(glm::vec3(0.35, 0.35, 0.35));
+	earth.grow(glm::vec3(0.55, 0.55, 0.55));
 	//sun.addChild(std::move(earth));
 	
 	auto moon = assimpLoad("models/Moon.obj", true);
-	moon.move(glm::vec3(0, 0, 35));
-	moon.grow(glm::vec3(0.3, 0.3, 0.3));
+	moon.move(glm::vec3(0, 0, 6));
+	moon.grow(glm::vec3(0.6, 0.6, 0.6));
 	earth.addChild(std::move(moon));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
@@ -206,8 +206,14 @@ int main() {
 	auto& boat = scene.objects[0];
 	auto& tiger = boat.getChild(1);
 
-	auto cameraPosition = glm::vec3(0, 100, 0);
-	auto camera = glm::lookAt(cameraPosition, glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
+	glm::vec3 cameraPosition = glm::vec3(0, 100, 0);
+	glm::vec3 cameraTarget = glm::vec3(0, 0, -1);
+	glm::vec3 cameraUp = glm::vec3(0, 1, 0);
+	float cameraSpeed = 1.5f;
+	float cameraPanSpeed = 0.5f;
+	float zoomSpeed = 0.5f;
+
+	auto camera = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 	auto perspective = glm::perspective(glm::radians(45.0), static_cast<double>(window.getSize().x) / window.getSize().y, 0.1, 100.0);
 
 	ShaderProgram& mainShader = scene.defaultShader;
@@ -230,13 +236,45 @@ int main() {
 				running = false;
 			}
 		}
-		
+
+		// Calculate the elapsed time since the last frame
 		auto now = c.getElapsedTime();
 		auto diff = now - last;
-		auto diffSeconds = diff.asSeconds();
+		float deltaTime = diff.asSeconds();
 		last = now;
+
+		// Handle real-time input for camera control
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			cameraPosition.x -= cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			cameraPosition.x += cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			cameraPosition.y += cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			cameraPosition.y -= cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+			cameraTarget.x -= cameraPanSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+			cameraTarget.x += cameraPanSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+			cameraPosition.z -= zoomSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+			cameraPosition.z += zoomSpeed * deltaTime;
+		}
+
+		// Update the camera view matrix
+		camera = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+		mainShader.setUniform("view", camera);
+
 		for (auto& animator : scene.animators) {
-			animator.tick(diffSeconds);
+			animator.tick(deltaTime);
 		}
 
 		// Clear the OpenGL "context".
@@ -250,5 +288,6 @@ int main() {
 
 	return 0;
 }
+
 
 
