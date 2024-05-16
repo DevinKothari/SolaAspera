@@ -103,7 +103,7 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
-	auto sun = assimpLoad("models/Sun.obj", true);
+	auto sun = assimpLoad("models/Venus_1K.obj", true);
 	sun.move(glm::vec3(0, 0, 0));
 	//sun.grow(glm::vec3(0.7, 0.7, 0.7));
 	auto mercury = assimpLoad("models/Mercury_1K.obj", true);
@@ -115,7 +115,7 @@ Scene lifeOfPi() {
 	venus.grow(glm::vec3(0.3, 0.3, 0.3));
 	sun.addChild(std::move(venus));
 	auto earth = assimpLoad("models/Earth.obj", true);
-	earth.move(glm::vec3(0, 0, 0));
+	earth.move(glm::vec3(0, 0, 50));
 	earth.grow(glm::vec3(0.3, 0.3, 0.3));
 	sun.addChild(std::move(earth));
 	auto moon = assimpLoad("models/Moon.obj", true);
