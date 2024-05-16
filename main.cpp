@@ -10,6 +10,7 @@ This application renders a textured mesh that was loaded with Assimp.
 #include "AssimpImport.h"
 #include "Animator.h"
 #include "ShaderProgram.h"
+#include "OrbitalAnimation.h"
 
 /**
  * @brief Defines a collection of objects that should be rendered with a specific shader program.
@@ -102,32 +103,36 @@ Scene bunny() {
  */
 Scene lifeOfPi() {
 	// This scene is more complicated; it has child objects, as well as animators.
-	auto boat = assimpLoad("models/Earth.obj", true);
-	boat.move(glm::vec3(0, -0.7, 0));
-	boat.grow(glm::vec3(0.3, 0.3, 0.3));
-	auto tiger = assimpLoad("models/Moon.obj", true);
-	tiger.move(glm::vec3(0, -5, 10));
-	boat.addChild(std::move(tiger));
+	auto earth = assimpLoad("models/Earth.obj", true);
+	earth.move(glm::vec3(0, 0, 0));
+	earth.grow(glm::vec3(0.3, 0.3, 0.3));
+	auto moon = assimpLoad("models/Moon.obj", true);
+	moon.move(glm::vec3(0, 0, 10));
+	moon.grow(glm::vec3(0.3, 0.3, 0.3));
+	earth.addChild(std::move(moon));
 	
 	// Because boat and tiger are local variables, they will be destroyed when this
 	// function terminates. To prevent that, we need to move them into a vector, and then
 	// move that vector as part of the return value.
 	std::vector<Object3D> objects;
-	objects.push_back(std::move(boat));
+	objects.push_back(std::move(earth));
 	
 	// We want these animations to referenced the *moved* objects, which are no longer
 	// in the variables named "tiger" and "boat". "boat" is now in the "objects" list at
 	// index 0, and "tiger" is the index-1 child of the boat.
-	Animator animBoat;
-	animBoat.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
-	Animator animTiger;
-	animTiger.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 10, glm::vec3(0, 0, 6.28)));
+	Animator animEarth;
+	animEarth.addAnimation(std::make_unique<RotationAnimation>(objects[0], 10, glm::vec3(0, 6.28, 0)));
+	Animator animMoonOrbit;
+	animMoonOrbit.addAnimation(std::make_unique<OrbitalAnimation>(objects[0].getChild(1), 20, objects[0].getPosition(), glm::vec3(0, 1, 0))); // Complete one orbit in 1 minute
+	Animator animMoonRotation;
+	animMoonRotation.addAnimation(std::make_unique<RotationAnimation>(objects[0].getChild(1), 10, glm::vec3(0, 0, 6.28)));
 
 	// The Animators will be destroyed when leaving this function, so we move them into
 	// a list to be returned.
 	std::vector<Animator> animators;
-	animators.push_back(std::move(animBoat));
-	animators.push_back(std::move(animTiger));
+	animators.push_back(std::move(animEarth));
+	animators.push_back(std::move(animMoonOrbit));
+	animators.push_back(std::move(animMoonRotation));
 
 	// Transfer ownership of the objects and animators back to the main.
 	return Scene {

@@ -149,6 +149,7 @@
     <ClInclude Include="KHR\khrplatform.h" />
     <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="OrbitalAnimation.h" />
     <ClInclude Include="RotationAnimation.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Texture.h" />
