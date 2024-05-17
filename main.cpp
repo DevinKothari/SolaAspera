@@ -184,7 +184,7 @@ Scene lifeOfPi() {
 
 	// Transfer ownership of the objects and animators back to the main.
 	return Scene {
-		textureMapping(),
+		phongLighting(),
 		std::move(objects),
 		std::move(animators)
 	};
@@ -218,8 +218,17 @@ int main() {
 
 	ShaderProgram& mainShader = scene.defaultShader;
 	mainShader.activate();
-	mainShader.setUniform("view", camera);
-	mainShader.setUniform("projection", perspective);
+	
+	mainShader.setUniform("light.position", glm::vec3(1, 0, 0));
+
+	// light properties
+	mainShader.setUniform("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	mainShader.setUniform("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	mainShader.setUniform("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+	mainShader.setUniform("light.constant", 1.0f);
+	mainShader.setUniform("light.linear", 0.09f);
+	mainShader.setUniform("light.quadratic", 0.032f);
+	mainShader.setUniform("material", glm::vec4(0.1, 0.1, 1, 32));
 
 	// Ready, set, go!
 	for (auto& animator : scene.animators) {
@@ -242,7 +251,9 @@ int main() {
 		auto diff = now - last;
 		float deltaTime = diff.asSeconds();
 		last = now;
-
+		mainShader.setUniform("view", camera);
+		mainShader.setUniform("projection", perspective);
+		mainShader.setUniform("viewPos", cameraPosition);
 		// Handle real-time input for camera control
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 			cameraPosition.x -= cameraSpeed * deltaTime;
