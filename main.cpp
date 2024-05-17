@@ -190,8 +190,8 @@ Scene lifeOfPi() {
 
 	// Transfer ownership of the objects and animators back to the main.
 	return Scene {
-		phongLighting(),
-		//textureMapping(),
+		//phongLighting(),
+		textureMapping(),
 		std::move(objects),
 		std::move(animators)
 	};
@@ -210,8 +210,11 @@ int main() {
 	// Initialize scene objects.
 	auto scene = lifeOfPi();
 	// In case you want to manipulate the scene objects directly by name.
-	auto& boat = scene.objects[0];
-	auto& tiger = boat.getChild(1);
+	auto& sun = scene.objects[1];
+	auto& mercury = scene.objects[2];
+	auto& venus = scene.objects[3];
+	auto& earth = scene.objects[4];
+	auto& moon = earth.getChild(1);
 
 	//music for interallar
 	sf::Music music;
@@ -295,7 +298,33 @@ int main() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
 			cameraPosition.z += zoomSpeed * deltaTime;
 		}
-
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			cameraTarget.x -= cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			cameraTarget.x += cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			cameraTarget.z += cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			cameraTarget.z -= cameraSpeed * deltaTime;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+			cameraTarget = sun.getPosition();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+			cameraTarget = mercury.getPosition();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+			cameraTarget = venus.getPosition();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+			cameraTarget = earth.getPosition();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+			cameraTarget = moon.getPosition();
+		}
 		// Update the camera view matrix
 		camera = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 		mainShader.setUniform("view", camera);
