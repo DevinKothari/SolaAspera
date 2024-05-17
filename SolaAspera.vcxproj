@@ -150,12 +150,15 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="AssimpImport.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="KHR\khrplatform.h" />
     <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="OrbitalAnimation.h" />
     <ClInclude Include="RotationAnimation.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="shader_m.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TranslationAnimation.h" />
   </ItemGroup>
